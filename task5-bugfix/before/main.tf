@@ -1,0 +1,32 @@
+# As given in the assignment - DO NOT apply, kept for reference only.
+# Two bugs: see after.tf and NOTES.md for the fix and explanation.
+
+data "aws_iam_policy_document" "roleC_trust" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::000000000000:user/roleB"]
+    }
+  }
+}
+
+resource "aws_iam_role" "roleC" {
+  name               = "roleC"
+  assume_role_policy = data.aws_iam_policy_document.roleC_trust.json
+}
+
+resource "aws_iam_role_policy" "roleC_s3" {
+  name = "roleC-s3-access"
+  role = aws_iam_role.roleC.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "s3:*"
+      Resource = "*"
+    }]
+  })
+}

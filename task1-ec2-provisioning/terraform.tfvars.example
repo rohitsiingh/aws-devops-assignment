@@ -1,0 +1,67 @@
+# Copy to terraform.tfvars and fill in real subnet/key-pair/SG values
+# before running terraform plan/apply.
+
+aws_region = "us-east-1"
+
+protected_instance_name = "database"
+
+instances = {
+  web = {
+    instance_type    = "t3.micro"
+    key_name         = "web-keypair"
+    root_volume_type = "gp3"
+    root_volume_size = 20
+    environment      = "prod"
+    owner            = "platform-team"
+    subnet_id        = "subnet-xxxxxxx1"
+    vpc_security_group_ids = ["sg-xxxxxxx1"]
+  }
+
+  app = {
+    instance_type    = "t3.small"
+    key_name         = "app-keypair"
+    root_volume_type = "gp3"
+    root_volume_size = 30
+    environment      = "prod"
+    owner            = "platform-team"
+    subnet_id        = "subnet-xxxxxxx1"
+    vpc_security_group_ids = ["sg-xxxxxxx2"]
+  }
+
+  cache = {
+    instance_type    = "m5.large"
+    key_name         = "cache-keypair"
+    root_volume_type = "gp3"
+    root_volume_size = 40
+    environment      = "prod"
+    owner            = "platform-team"
+    subnet_id        = "subnet-xxxxxxx1"
+    vpc_security_group_ids = ["sg-xxxxxxx2"]
+  }
+
+  # This is the io2 instance required by Task 1, and also the instance
+  # protected by lifecycle.prevent_destroy (see protected_instance_name
+  # above and NOTES.md for the reasoning).
+  database = {
+    instance_type    = "r5.large"
+    key_name         = "database-keypair"
+    root_volume_type = "io2"
+    root_volume_size = 100
+    root_volume_iops = 3000
+    environment      = "prod"
+    owner            = "data-team"
+    subnet_id        = "subnet-xxxxxxx3"
+    vpc_security_group_ids = ["sg-xxxxxxx3"]
+  }
+
+  batch = {
+    instance_type    = "c5.large"
+    key_name         = "batch-keypair"
+    root_volume_type = "gp3"
+    root_volume_size = 50
+    environment      = "prod"
+    owner            = "data-team"
+    subnet_id        = "subnet-xxxxxxx1"
+    vpc_security_group_ids = ["sg-xxxxxxx2"]
+  }
+}
